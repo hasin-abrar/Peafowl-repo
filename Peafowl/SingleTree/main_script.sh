@@ -3,7 +3,7 @@
 tree="$1"
 # range of entropy
 entropy_lower=9
-entropy_higher=11
+entropy_higher=31
 no_of_threads=$2
 source_folder="$3"
 is_reverse_compliment=$4
