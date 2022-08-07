@@ -60,8 +60,11 @@ cd "$output" #change output filename
 
 echo 'Constructing binary matrix...'
 
-g++ kmerMerge.cpp -o kmerMerge -lpthread
-./kmerMerge $filearg $kmer_len $no_of_threads
+sizeFile="FileSize.txt"
+stat -c %s * > $sizeFile
+
+g++ -std=c++11 kmerMerge.cpp -o kmerMerge -lpthread
+./kmerMerge $filearg $kmer_len $no_of_threads $sizeFile
 
 # echo 'Completed binary matrix'
 
