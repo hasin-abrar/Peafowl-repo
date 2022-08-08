@@ -340,8 +340,8 @@ int main(int argc, char **argv){
 	}
 	// How many partition should be made of 8 GB kmers at max
 	int partitionCount = ceil(totalSize / maxMem);
-	cout<<totalSize<<" "<<maxMem<<endl;
-	cout<<"Total partitions: "<<partitionCount<<endl;
+//	cout<<totalSize<<" "<<maxMem<<endl;
+//	cout<<"Total partitions: "<<partitionCount<<endl;
 	
 	
 	//vector<string> file_arr;

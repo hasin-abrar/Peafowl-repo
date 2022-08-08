@@ -324,10 +324,26 @@ void createSortedKmerFile(string filename){
 
 int main(int argc, char **argv){
 
-	NUM_THREADS=atoi(argv[3]);
-	kmerLength = atoi(argv[2]); //kmer length passed as argument when running cpp from run.sh
-
 	string filename_arr = argv[1];
+	kmerLength = stoi(argv[2]); //kmer length passed as argument when running cpp from run.sh
+	NUM_THREADS=stoi(argv[3]);
+	string sizeFileName = argv[4];
+	double maxMem = 8 * 1024 * 1024;
+
+	string fileLine;
+	long long int totalSize = 0;
+	long long int singleFileSize;
+	ifstream sizeFile(sizeFileName.c_str());	
+	while(getline(sizeFile, fileLine)){
+		singleFileSize = stoi(fileLine);
+		totalSize += singleFileSize;
+	}
+	// How many partition should be made of 8 GB kmers at max
+	int partitionCount = ceil(totalSize / maxMem);
+//	cout<<totalSize<<" "<<maxMem<<endl;
+//	cout<<"Total partitions: "<<partitionCount<<endl;
+	
+	
 	//vector<string> file_arr;
 	char *file_arr[500];
 
@@ -430,7 +446,7 @@ int main(int argc, char **argv){
 
 
 
-	valInc=valMax/2;
+	valInc=valMax/partitionCount;
 	// valInc = valMax;
 
 

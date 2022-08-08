@@ -55,9 +55,9 @@ bin_len=`expr $bin_len - 1`
 sed -i "1i \ $specie_no $bin_len" "output.phy"
 
 # run raxml with BINGAMMA
-raxmlHPC -m BINGAMMA -p 12345 -s output.phy -n T1
+raxmlHPC-PTHREADS-AVX -m BINGAMMA -p 12345 -T $no_of_threads -s output.phy -n T1
 #raxmlHPC -m BINCAT -p 12345 -s output.phy -n T1
-raxmlHPC -m BINGAMMA -p 12345 -n "$out_name" -f I -t RAxML_result.T1
+raxmlHPC-PTHREADS-AVX -m BINGAMMA -p 12345 -T $no_of_threads -n "$out_name" -f I -t RAxML_result.T1
 
 # echo 'Executing Ktreedist...'
 
