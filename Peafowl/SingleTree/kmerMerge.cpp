@@ -333,15 +333,18 @@ int main(int argc, char **argv){
 	string fileLine;
 	long long int totalSize = 0;
 	long long int singleFileSize;
+    int base = 10;
+    char *endC; 
+
 	ifstream sizeFile(sizeFileName.c_str());	
 	while(getline(sizeFile, fileLine)){
-		singleFileSize = stoi(fileLine);
+		singleFileSize = strtoll(fileLine.c_str(), &endC, base);
 		totalSize += singleFileSize;
 	}
 	// How many partition should be made of 8 GB kmers at max
 	int partitionCount = ceil(totalSize / maxMem);
 //	cout<<totalSize<<" "<<maxMem<<endl;
-//	cout<<"Total partitions: "<<partitionCount<<endl;
+	cout<<"Total partitions: "<<partitionCount<<endl;
 	
 	
 	//vector<string> file_arr;
