@@ -57,9 +57,9 @@ If the run is successful, you will see a result folder created in the same locat
 Example Run
 ----------------------------------------------------------------------------------------------
 A folder named 'example' is already provided with the source files. It contains 7 sample fasta files. Copy this folder to the 'Peafowl' directory containing the script 'kphylo.sh'. Change to this directory and execute the following command.
-
-./peafowl.sh -i example -t 16 -r
-
+```console
+./peafowl.sh -i example -n 16 -r
+```
 
 Caution
 ----------------------------------------------------------------------------------------------

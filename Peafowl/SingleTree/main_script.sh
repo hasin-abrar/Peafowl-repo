@@ -57,7 +57,7 @@ sed -i "1i \ $specie_no $bin_len" "output.phy"
 # run raxml with BINGAMMA
 raxmlHPC-PTHREADS-AVX -m BINGAMMA -p 12345 -T $no_of_threads -s output.phy -n T1
 #raxmlHPC -m BINCAT -p 12345 -s output.phy -n T1
-raxmlHPC-PTHREADS-AVX -m BINGAMMA -p 12345 -T $no_of_threads -n "$out_name" -f I -t RAxML_result.T1
+# raxmlHPC-PTHREADS-AVX -m BINGAMMA -p 12345 -T $no_of_threads -n "$out_name" -f I -t RAxML_result.T1
 
 # echo 'Executing Ktreedist...'
 
@@ -69,8 +69,8 @@ echo 'Deleting unncessary files...'
 
 rm -r KmerOutputs
 rm -r "$source_folder"
-rm !("RAxML_rootedTree.""$out_name"|"RAxML_result.T1"|"entropyRandomOutput.txt")
+rm !("README.md"|"RAxML_result.T1"|"entropyRandomOutput.txt")
 
 mv "RAxML_result.T1" "Result_unrooted_tree.newick"
-mv "RAxML_rootedTree.$out_name" "Result_rooted_tree.newick"
+# mv "RAxML_rootedTree.$out_name" "Result_rooted_tree.newick"
 
