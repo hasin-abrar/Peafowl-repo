@@ -63,7 +63,7 @@ echo 'Constructing binary matrix...'
 sizeFile="FileSize.txt"
 stat -c %s *.txt > $sizeFile
 
-g++ -std=c++11 kmerMerge.cpp -o kmerMerge -lpthread
+g++ -std=c++11 -Ofast kmerMerge.cpp -o kmerMerge -lpthread
 ./kmerMerge $filearg $kmer_len $no_of_threads $sizeFile
 
 # echo 'Completed binary matrix'
@@ -73,7 +73,7 @@ bin_len=$(wc -l < "kmer_exist_output.txt")
 # echo $bin_len
 
 echo 'Starting entropy calculation...'
-g++ entropy.cpp -o entropy -lpthread
+g++ -Ofast entropy.cpp -o entropy -lpthread
 ./entropy "$1" "$3" $bin_len
 # echo 'Completed entropy calculation'
 
