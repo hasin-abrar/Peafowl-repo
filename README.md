@@ -3,7 +3,7 @@
 
 Peafowl is an alignment free, k-mer based tool for phylogenetic tree construction.
 
-Peafowl runs on 64-bit Intel-compatible processors supporting Linux. This implementation has been tested on ubuntu 16.04 LTS, Intel Core-i5, 8 GB RAM. Greater memory is preferable for large genome sequences.
+<!-- Peafowl runs on 64-bit Intel-compatible processors supporting Linux. This implementation has been tested on ubuntu 16.04 LTS, Intel Core-i5, 8 GB RAM. Greater memory is preferable for large genome sequences. -->
 
 Requirements
 ----------------------------------------------------------------------------------------------
@@ -17,17 +17,18 @@ Peafowl requires Jellyfish 2.2.4 and Raxml 8.2.4 tools. They can be installed on
   - sudo apt-get update
   - sudo apt-get install raxml
 
+Add these to $PATH before running Peafowl.
 
 Input and Output Formats
 ----------------------------------------------------------------------------------------------
 **Input**: Set of DNA sequences in fasta format (Baboon.fasta, Gibbon.fasta, etc) A fasta file should contain the sequence of one specie only. Data should be sequential long-reads/full genome. Current version does not support short-reads or interleaved data. (See example folder for sample files) <br>
-**Ouput**: Rooted and unrooted phylogenetic trees in Newick format for the set of input species (Result_rooted_tree.newick, Result_unrooted_tree.newick)
+**Ouput**: Unrooted phylogenetic trees in Newick format for the set of input species (Result_unrooted_tree.newick)
 
 
 Installation and Run
 ----------------------------------------------------------------------------------------------
 1. Download 'Peafowl' from this repository.
-2. Create a new folder and put all fasta files (ex: Baboon.fasta, Gorilla.fasta, etc.) inside. Rename the folder (Do not use space/dot in the name and do not use the reserved word 'Peafowl'). This folder name should be provided as an argument when running the script. 
+2. Create a new folder and put all fasta files (ex: Baboon.fasta, Gorilla.fasta, etc.) inside. Rename the folder (Do not use space/dot in the name).<!-- and do not use the reserved word 'Peafowl').  --> This folder name should be provided as an argument when running the script.
 3. Put the folder with fasta files inside 'Peafowl' directory that contains a script 'peafowl.sh'. This directory should now have three separate entities ('your input folder', 'Peafowl', 'peafowl.sh').
 4. From the terminal, change into the directory that contains 'peafowl.sh'.
 5. Run the script 'peafowl.sh' with the following arguments as needed.
@@ -51,7 +52,7 @@ Usage: ./peafowl.sh -i input_folder [ -n no_of_threads ] [ -r ] [ -a ]
 
 Result
 ----------------------------------------------------------------------------------------------
-If the run is successful, you will see a result folder created in the same location as the input. If input folder was named 'example', the result folder created will be 'example_Result'. This result folder should contain two trees (rooted and unrooted) in Newick format. Output trees are constructed from k-mer length yielding the maximum entropy.
+If the run is successful, you will see a result folder created in the same location as the input. If input folder was named 'example', the result folder created will be 'example_Result'. This result folder should contain unrooted tree in Newick format.
 
 
 Example Run
@@ -70,10 +71,4 @@ Caution
 
 Citation
 ----------------------------------------------------------------------------------------------
-1. Alexandros Stamatakis. Raxml version 8: a tool for phylogenetic analysis and post-analysis of large phylogenies. Bioinformatics, 30(9):1312–1313, 2014.
-
-2. Qingpeng Zhang, Jason Pell, Rosangela Canino-Koning, Adina Chuang Howe, and C Titus Brown. These are not the k-mers you are looking for: efficient online k-mer counting using a probabilistic data structure. PloS one, 9(7):e101271, 2014.
-
-3. https://howtoinstall.co/en/ubuntu/xenial/jellyfish
-
-4. https://howtoinstall.co/en/ubuntu/xenial/raxml
+Zahin, T., Abrar, M.H., Rahman, M., Tasnim, T., Bayzid, M.S. and Rahman, A., 2019. An Alignment-free Method for Phylogeny Estimation using Maximum Likelihood. bioRxiv, pp.2019-12.

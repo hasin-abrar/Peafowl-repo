@@ -69,7 +69,9 @@ echo 'Deleting unncessary files...'
 
 rm -r KmerOutputs
 rm -r "$source_folder"
-rm !("README.md"|"RAxML_result.T1"|"entropyRandomOutput.txt")
+rm "differentKmerEntropy.sh" findMaxEntropy.cpp entropy.cpp final_run.sh
+rm kmer_exist_output.txt output.phy findMaxEntropy kmerMerge.cpp transpose.sh
+rm RAxML_info.T1 RAxML_parsimonyTree.T1 RAxML_bestTree.T1 RAxML_log.T1
 
 mv "RAxML_result.T1" "Result_unrooted_tree.newick"
 # mv "RAxML_rootedTree.$out_name" "Result_rooted_tree.newick"
