@@ -59,7 +59,7 @@ Example Run
 ----------------------------------------------------------------------------------------------
 A folder named 'example' is already provided with the source files. It contains 7 sample fasta files. Copy this folder to the 'Peafowl' directory containing the script 'kphylo.sh'. Change to this directory and execute the following command.
 ```console
-./peafowl.sh -i example -n 16 -r
+/usr/bin/time -f \"%M,%e,%U,%S\" --output-file=memkb_sec_Usec_Ksec_peafowl.txt ./peafowl.sh -i example -n 16 -r
 ```
 
 Caution
