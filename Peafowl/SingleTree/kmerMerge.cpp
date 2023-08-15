@@ -37,7 +37,7 @@ vector<ShortKmer> * kmer_arrays;
 
 ifstream * readfiles;
 
-ofstream taxafile;
+// ofstream taxafile;
 ofstream outfile;
 
 long long int valMax=0x3FFFFFFFFFFFFFFF;
@@ -358,7 +358,7 @@ int main(int argc, char **argv){
         size_t pos = filename_arr.find("/");
         string name = filename_arr.substr(0,pos);
         createSortedKmerFile(name);
-		cout<<name<<endl;
+		// cout<<name<<endl;
 		//file_arr.push_back(name);
 		file_arr[k]=new char[name.size()+1];
 		for(int i=0;i<name.size();i++){
@@ -398,10 +398,10 @@ int main(int argc, char **argv){
 
 	}
 
-	for(int i=0; i<noOfSpecies; i++)
-	{
-		cout<<nameOfSpecies[i]<<endl;
-    }
+	// for(int i=0; i<noOfSpecies; i++)
+	// {
+	// 	cout<<nameOfSpecies[i]<<endl;
+    // }
 
 
 
@@ -413,7 +413,7 @@ int main(int argc, char **argv){
 	}
 
 
-	taxafile.open("taxa_output.txt");
+	// taxafile.open("taxa_output.txt");
 	outfile.open("kmer_exist_output.txt");
 	string printline = nameOfSpecies[0];
 	for(int i=1; i<noOfSpecies; i++){
@@ -494,8 +494,8 @@ int main(int argc, char **argv){
 			for(unsigned int i=0;i<ht->kmers[index].size();i++)
 			{
 
-    			printline=getKmer(ht->kmers[index][i].intValueOfKmer);
-    			taxafile<<printline<<"\n";
+    			// printline=getKmer(ht->kmers[index][i].intValueOfKmer);
+    			// taxafile<<printline<<"\n";
     			printline="";
 				
 				
@@ -547,7 +547,7 @@ int main(int argc, char **argv){
 	}
 
 	outfile.close();
-	taxafile.close();
+	// taxafile.close();
 
 	return 0;
 
