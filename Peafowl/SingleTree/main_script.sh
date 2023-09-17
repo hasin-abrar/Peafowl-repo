@@ -3,8 +3,9 @@
 tree="$1"
 # range of entropy
 entropy_lower=9
-entropy_higher=31
+entropy_higher=11
 no_of_threads=$2
+
 source_folder="$3"
 is_reverse_compliment=$4
 specie_no=$(ls "$source_folder" | wc -l) # number of species
@@ -16,6 +17,7 @@ output+="_Result"
 out_name="Resultant_Tree"
 mkdir "$output"
 
+#TODO: Have to change the code not to copy contents from src fldr
 cp -r "$source_folder" "$output"
 
 # copying necessary files inside the sample folder
@@ -73,6 +75,8 @@ rm "differentKmerEntropy.sh" findMaxEntropy.cpp entropy.cpp final_run.sh
 rm kmer_exist_output.txt output.phy findMaxEntropy kmerMerge.cpp transpose.sh
 rm RAxML_info.T1 RAxML_parsimonyTree.T1 RAxML_bestTree.T1 RAxML_log.T1
 
-mv "RAxML_result.T1" "Result_unrooted_tree.newick"
+mv "RAxML_result.T1" "Result_unrooted_tree_Kmer_"$kmer_len".newick"
 # mv "RAxML_rootedTree.$out_name" "Result_rooted_tree.newick"
-
+cd ..
+rm differentKmerEntropy.sh final_run.sh kmerMerge.cpp entropy.cpp findMaxEntropy.cpp
+rm main_script.sh transpose.sh

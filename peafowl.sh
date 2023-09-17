@@ -53,6 +53,7 @@ fi
 
 if [[ $is_top_kmer = 'true' ]]; then
 	cp Peafowl/SingleTree/* .
+  chmod +x differentKmerEntropy.sh
 else
 	cp Peafowl/All_kmer/* .
 fi
@@ -62,10 +63,14 @@ fi
 # echo $source_folder
 # echo $is_reverse_compliment
 
+chmod +x main_script.sh
+chmod +x final_run.sh
+chmod +x transpose.sh
+
 ./main_script.sh "$tree" $no_of_threads "$source_folder" "$is_reverse_compliment"
 
 # find . -maxdepth 1 -type f -not -name "peafowl.sh" -delete
-rm differentKmerEntropy.sh final_run.sh kmerMerge.cpp entropy.cpp findMaxEntropy.cpp
-rm main_script.sh transpose.sh
+# rm differentKmerEntropy.sh final_run.sh kmerMerge.cpp entropy.cpp findMaxEntropy.cpp
+# rm main_script.sh transpose.sh
 
 echo 'Process completed successfully'

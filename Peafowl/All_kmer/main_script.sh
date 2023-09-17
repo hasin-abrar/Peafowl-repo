@@ -3,7 +3,7 @@
 tree="$1"
 # range of entropy
 entropy_lower=9
-entropy_higher=31
+entropy_higher=11
 no_of_threads=$2
 source_folder="$3"
 is_reverse_compliment=$4
@@ -64,18 +64,18 @@ do
 	echo "Estimating tree..."
 
 	# run raxml with BINGAMMA
-	raxmlHPC -m BINGAMMA -p 12345 -s output.phy -n T1
+	raxmlHPC-PTHREADS-AVX -m BINGAMMA -T $no_of_threads -p 12345 -s output.phy -n T1
 
-	raxmlHPC -m BINGAMMA -p 12345 -n "$out_name" -f I -t RAxML_result.T1
+	# raxmlHPC -m BINGAMMA -p 12345 -n "$out_name" -f I -t RAxML_result.T1
 
 
-	cd ..
+	# cd ..
 
 
 	# cp "$tree" "$output"
 	# cp "Ktreedist.pl" "$output"
 
-	cd "$output"
+	# cd "$output"
 
 	# echo 'Executing Ktreedist...'
 
@@ -84,11 +84,15 @@ do
 
 	# perl Ktreedist.pl -p partition_output_main.txt -rt "$tree" -ct "RAxML_rootedTree.""$out_name"
 
-	echo 'Removing unnecessary files...'
+	
 
-	rm !("RAxML_rootedTree.""$out_name"|"RAxML_result.T1")
-	mv "RAxML_result.T1" "Result_unrooted_tree.newick"
-	mv "RAxML_rootedTree.$out_name" "Result_rooted_tree.newick"
+	# rm !("RAxML_rootedTree.""$out_name"|"RAxML_result.T1")
+	mv "RAxML_result.T1" "Result_unrooted_tree_Kmer_"$i".newick"
+	# mv "RAxML_rootedTree.$out_name" "Result_rooted_tree.newick"
+	echo 'Removing unnecessary files...'
+	rm entropy.cpp *.txt entropy kmerMerge
+	rm output.phy kmerMerge.cpp transpose.sh
+	rm RAxML_info.T1 RAxML_parsimonyTree.T1 RAxML_bestTree.T1 RAxML_log.T1
 
 	cd ..
 
@@ -100,5 +104,10 @@ do
 done
 
 #delete all files in current folder except entropy list and subdirectories
-find . -maxdepth 1 -type f -not -name "entropyRandomOutput.txt" -delete
+# find . -maxdepth 1 -type f -not -name "entropyRandomOutput.txt" -delete
 rm -r "$source_folder"
+rm final_run.sh kmerMerge.cpp entropy.cpp  transpose.sh
+cd ..
+rm final_run.sh kmerMerge.cpp entropy.cpp 
+rm main_script.sh transpose.sh
+
