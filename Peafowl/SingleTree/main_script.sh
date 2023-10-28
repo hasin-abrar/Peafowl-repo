@@ -47,14 +47,16 @@ echo $kmer_len
 
 cp "KmerOutputs/KmerOutputs""_$kmer_len""/kmer_exist_output.txt" "./kmer_exist_output.txt"
 
+# bin_len=$(wc -l < "kmer_exist_output.txt")
+# bin_len=`expr $bin_len - 1`
+# echo "$specie_no $bin_len" >> output.phy
+
 ./transpose.sh
 # extract nsequnce length from kmer_exist_output.txt file (last line number with content - 1)
-bin_len=$(wc -l < "kmer_exist_output.txt")
 
-bin_len=`expr $bin_len - 1`
 
 #add number of species and seq length in the first line of transpose output, "output.phy"
-sed -i "1i \ $specie_no $bin_len" "output.phy"
+# sed -i "1i \ $specie_no $bin_len" "output.phy"
 
 # run raxml with BINGAMMA
 # with avx support
@@ -73,11 +75,11 @@ cp "KmerOutputs/entropyRandomOutput.txt" "./entropyRandomOutput.txt"
 
 echo 'Deleting unncessary files...'
 
-# rm -r KmerOutputs
-# rm -r "$source_folder"
-# rm "differentKmerEntropy.sh" findMaxEntropy.cpp entropy.cpp final_run.sh
-# rm kmer_exist_output.txt output.phy findMaxEntropy kmerMerge.cpp transpose.sh
-# rm RAxML_info.T1 RAxML_parsimonyTree.T1 RAxML_bestTree.T1 RAxML_log.T1
+rm -r KmerOutputs
+rm -r "$source_folder"
+rm "differentKmerEntropy.sh" findMaxEntropy.cpp entropy.cpp final_run.sh
+rm kmer_exist_output.txt output.phy findMaxEntropy kmerMerge.cpp transpose.sh
+rm RAxML_info.T1 RAxML_parsimonyTree.T1 RAxML_bestTree.T1 RAxML_log.T1
 
 mv "RAxML_result.T1" "Result_unrooted_tree_Kmer_"$kmer_len".newick"
 # mv "RAxML_rootedTree.$out_name" "Result_rooted_tree.newick"

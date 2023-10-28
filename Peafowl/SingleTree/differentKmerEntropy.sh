@@ -10,7 +10,7 @@ do
 	cd ../..	
 	
 done
-# '
+
 g++ -Ofast findMaxEntropy.cpp -o findMaxEntropy -lpthread
 kmer=$(./findMaxEntropy)
 

@@ -3,7 +3,7 @@
 tree="$1"
 # range of entropy
 entropy_lower=9
-entropy_higher=31
+entropy_higher=11
 no_of_threads=$2
 source_folder="$3"
 is_reverse_compliment=$4
@@ -53,18 +53,12 @@ do
 
 	./transpose.sh
 
-	# extract nsequnce length from kmer_exist_output.txt file (last line number with content - 1)
-	bin_len=$(wc -l < "kmer_exist_output.txt")
-
-	bin_len=`expr $bin_len - 1`
-
-	#add number of species and seq length in the first line of transpose output, "output.phy"
-	sed -i "1i \ $specie_no $bin_len" "output.phy"
 
 	echo "Estimating tree..."
 
 	# run raxml with BINGAMMA
-	raxmlHPC-PTHREADS-AVX -m BINGAMMA -T $no_of_threads -p 12345 -s output.phy -n T1
+	raxmlHPC-PTHREADS -m BINGAMMA -T $no_of_threads -p 12345 -s output.phy -n T1
+	# raxmlHPC-PTHREADS-AVX -m BINGAMMA -T $no_of_threads -p 12345 -s output.phy -n T1
 
 	# raxmlHPC -m BINGAMMA -p 12345 -n "$out_name" -f I -t RAxML_result.T1
 
