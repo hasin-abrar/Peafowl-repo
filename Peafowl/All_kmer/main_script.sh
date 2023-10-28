@@ -57,8 +57,8 @@ do
 	echo "Estimating tree..."
 
 	# run raxml with BINGAMMA
-	raxmlHPC-PTHREADS -m BINGAMMA -T $no_of_threads -p 12345 -s output.phy -n T1
-	# raxmlHPC-PTHREADS-AVX -m BINGAMMA -T $no_of_threads -p 12345 -s output.phy -n T1
+	# raxmlHPC-PTHREADS -m BINGAMMA -T $no_of_threads -p 12345 -s output.phy -n T1
+	raxmlHPC-PTHREADS-AVX -m BINGAMMA -T $no_of_threads -p 12345 -s output.phy -n T1
 
 	# raxmlHPC -m BINGAMMA -p 12345 -n "$out_name" -f I -t RAxML_result.T1
 
