@@ -48,7 +48,7 @@ long long int valInc=0x0010000000000000;
 
 class HashTable{
 public:
-	vector<Kmer> kmers[HASH_TABLE_LENGTH];//this need to be take care of
+	vector<Kmer> kmers[HASH_TABLE_LENGTH];//this needs to be taken care of
 	long long int totalKmers_Bucket[HASH_TABLE_LENGTH];
 	pthread_mutex_t hashTableBuckets_mutex[HASH_TABLE_LENGTH];
 
@@ -87,20 +87,11 @@ void HashTable::insertKmer(long long int intValueOfKmer, long long int intValueO
         {        
             kmers[index][i].kmerCount.push_back(kmer_count);
             kmers[index][i].speciesNo.push_back(speciesNo);
-
-   //          if (intValueOfKmer == 10)
-			// {
-			// 	cout<<"Inside Species: "<<speciesNo<<endl;
-			// 	for (int j = 0; j < kmers[index][i].kmerCount.size(); ++j)
-			// 	{
-			// 		cout<<"Count "<<kmers[index][i].kmerCount[j];
-			// 		cout<<" Species: "<<kmers[index][i].speciesNo[j]<<endl;
-			// 	}
-			// }
 			found=1;
 			break;
 		}
 	}
+	
     if(found == 0)
     {
         unsigned long int indexRC = (unsigned long int)intValueOfRCKmer % HASH_TABLE_LENGTH;
@@ -348,13 +339,11 @@ int main(int argc, char **argv){
 	
 	
 	//vector<string> file_arr;
+	// should be equal to noOfSpecies
 	char *file_arr[500];
-
-
 	int k = 0;
 
 	while(filename_arr.size()>1){
-
         size_t pos = filename_arr.find("/");
         string name = filename_arr.substr(0,pos);
         createSortedKmerFile(name);
@@ -371,73 +360,34 @@ int main(int argc, char **argv){
 		noOfSpecies++;
 	}
 
-
-
-	//noOfSpecies = file_arr.size();
-
-	// cout<<noOfSpecies<<endl;
-
-	// for(int i=0; i<noOfSpecies; i++){
-	// 	cout<<file_arr[i]<<endl;
-	// }
-
 	kmer_arrays=new vector<ShortKmer>[noOfSpecies];
 	readfiles= new ifstream[noOfSpecies];
-
-
-
 	ht=new HashTable();
-
 
 	for(int i=0; i<noOfSpecies; i++){/////////
 		string p = (string)file_arr[i];
         size_t pos = p.find(".");
         string name = p.substr(0,pos);
-
 		nameOfSpecies.push_back(name);
-
 	}
-
-	// for(int i=0; i<noOfSpecies; i++)
-	// {
-	// 	cout<<nameOfSpecies[i]<<endl;
-    // }
-
-
-
 
 	for(int i=0; i<noOfSpecies; i++){
-
 		readfiles[i].open(file_arr[i]);
-
 	}
-
-
-	// taxafile.open("taxa_output.txt");
 	outfile.open("kmer_exist_output.txt");
 	string printline = nameOfSpecies[0];
 	for(int i=1; i<noOfSpecies; i++){
 		printline=printline+"\t"+nameOfSpecies[i];
-
 	}
 	outfile<<printline<<"\n";
-
-
-    //now we will create multithread
-    // we will have total 8 thread and they will read from the vector
 
     ThreadArg *thArgs[NUM_THREADS];
     pthread_t caseThreads[NUM_THREADS];
     pthread_attr_t attr;
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-
     int rc;
 	void *status;
-
-
-
-
 	valMax=0;
 
 	for(int i=0;i<kmerLength;i++)
@@ -446,13 +396,9 @@ int main(int argc, char **argv){
 		valMax=valMax|3;
 
 	}
-
-
-
 	valInc=valMax/partitionCount;
 	// valInc = valMax;
-
-
+	int pc = 0;
 	while(valBar<valMax)
 	{
 		valBar+=valInc;
@@ -481,17 +427,17 @@ int main(int argc, char **argv){
 	   }
 
 
-	   cout<<"-------------------------------------------------"<<endl;
+	   cout<<"----------------------"<<pc<<"/"<<partitionCount<<"---------------------------"<<endl;
 
     //now we have to output the matrix in a file
 
 	//	ht->dumpKmers();
 
-		for(unsigned long int index=0;index<HASH_TABLE_LENGTH;index++)
+		for(uint64_t index=0;index<HASH_TABLE_LENGTH;index++)
 		{
-    		int count=ht->kmers[index].size();
+    		uint64_t count=ht->kmers[index].size();
 
-			for(unsigned int i=0;i<ht->kmers[index].size();i++)
+			for(uint64_t i=0;i<ht->kmers[index].size();i++)
 			{
 
     			// printline=getKmer(ht->kmers[index][i].intValueOfKmer);
@@ -499,14 +445,14 @@ int main(int argc, char **argv){
     			printline="";
 				
 				
-				vector<int> speciesPresent(noOfSpecies,0);
-				for (int p = 0; p < ht->kmers[index][i].speciesNo.size(); ++p)
+				vector<int32_t> speciesPresent(noOfSpecies,0);
+				for (uint64_t p = 0; p < ht->kmers[index][i].speciesNo.size(); ++p)
 				{
-					int indx = ht->kmers[index][i].speciesNo[p];
+					uint64_t indx = ht->kmers[index][i].speciesNo[p];
 					speciesPresent[indx] = 1;
 				}
 				
-				for(int j=0;j<noOfSpecies;j++)
+				for(int32_t j=0;j<noOfSpecies;j++)
 				{
        				if(speciesPresent[j] == 1)
 					{
@@ -515,18 +461,6 @@ int main(int argc, char **argv){
         			else printline=printline+"0\t";
     			}
     			outfile<<printline<<"\n";
-    			/*
-				int k=0;
-    			for(int j=0;j<noOfSpecies;j++)
-				{
-       				if(j==ht->kmers[index][i].speciesNo[k] && k<ht->kmers[index][i].speciesNo.size())
-					{
-        				printline=printline+"1\t";
-        				k++;
-        			}
-        			else printline=printline+"0\t";
-    			}
-    			*/
         		
         	}
 

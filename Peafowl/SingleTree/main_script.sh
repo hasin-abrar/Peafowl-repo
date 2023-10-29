@@ -45,7 +45,7 @@ echo ''
 echo -n "Tree will be constructed for k-mer size: "
 echo $kmer_len
 
-cp "KmerOutputs/KmerOutputs""_$kmer_len""/kmer_exist_output.txt" "./kmer_exist_output.txt"
+mv "KmerOutputs/KmerOutputs""_$kmer_len""/kmer_exist_output.txt" "./kmer_exist_output.txt"
 
 # bin_len=$(wc -l < "kmer_exist_output.txt")
 # bin_len=`expr $bin_len - 1`
@@ -71,7 +71,7 @@ raxmlHPC-PTHREADS -m BINGAMMA -p 12345 -T $no_of_threads -s output.phy -n T1
 
 # perl Ktreedist.pl -r -n -s scaled_output_main.txt -rt "$tree" -ct "RAxML_rootedTree.""$out_name" >> comparison_result.txt
 
-cp "KmerOutputs/entropyRandomOutput.txt" "./entropyRandomOutput.txt"
+mv "KmerOutputs/entropyRandomOutput.txt" "./entropyRandomOutput.txt"
 
 echo 'Deleting unncessary files...'
 
