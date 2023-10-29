@@ -49,7 +49,7 @@ long long int valInc=0x0010000000000000;
 class HashTable{
 public:
 	vector<Kmer> kmers[HASH_TABLE_LENGTH];//this needs to be taken care of
-	long long int totalKmers_Bucket[HASH_TABLE_LENGTH];
+	// long long int totalKmers_Bucket[HASH_TABLE_LENGTH];
 	pthread_mutex_t hashTableBuckets_mutex[HASH_TABLE_LENGTH];
 
 
@@ -64,7 +64,7 @@ HashTable::HashTable(){
 	for(int i=0;i<HASH_TABLE_LENGTH;i++)
 	{
 		pthread_mutex_init(&hashTableBuckets_mutex[i],NULL);
-		totalKmers_Bucket[i]=0;
+		// totalKmers_Bucket[i]=0;
 	}
 }
 
@@ -73,11 +73,6 @@ void HashTable::insertKmer(long long int intValueOfKmer, long long int intValueO
 	unsigned long int index = (unsigned long int)intValueOfKmer % HASH_TABLE_LENGTH;
 
 	int found=0;
-
-	// if (intValueOfKmer == 10)
-	// {
-	// 	cout<<"Species: "<<speciesNo<<endl;
-	// }
 
 	pthread_mutex_lock(&hashTableBuckets_mutex[index]);
 
@@ -91,13 +86,16 @@ void HashTable::insertKmer(long long int intValueOfKmer, long long int intValueO
 			break;
 		}
 	}
-	
+	pthread_mutex_unlock(&hashTableBuckets_mutex[index]);
+
     if(found == 0)
     {
         unsigned long int indexRC = (unsigned long int)intValueOfRCKmer % HASH_TABLE_LENGTH;
+
+		pthread_mutex_lock(&hashTableBuckets_mutex[indexRC]);
         for(unsigned long long int i=0;i<kmers[indexRC].size();i++)
         {
-            if(intValueOfRCKmer == kmers[indexRC][i].intValueOfKmer) // does not handle mutex
+            if(intValueOfRCKmer == kmers[indexRC][i].intValueOfKmer) 
             {	
             	//this code should not execute
                 kmers[indexRC][i].kmerCount.push_back(kmer_count);
@@ -107,6 +105,7 @@ void HashTable::insertKmer(long long int intValueOfKmer, long long int intValueO
                 break;
             }
         }
+		pthread_mutex_unlock(&hashTableBuckets_mutex[indexRC]);
     }
 
 	if(found==0)
@@ -115,15 +114,13 @@ void HashTable::insertKmer(long long int intValueOfKmer, long long int intValueO
         km.kmerCount.push_back(kmer_count);
         km.intValueOfKmer=intValueOfKmer;
         km.speciesNo.push_back(speciesNo);
-
+		pthread_mutex_lock(&hashTableBuckets_mutex[index]);
 		kmers[index].push_back(km);
 
-		totalKmers_Bucket[index]++;
-
+		// totalKmers_Bucket[index]++;
+		pthread_mutex_unlock(&hashTableBuckets_mutex[index]);
 
 	}
-
-	pthread_mutex_unlock(&hashTableBuckets_mutex[index]);
 }
 
 
@@ -402,6 +399,7 @@ int main(int argc, char **argv){
 	while(valBar<valMax)
 	{
 		valBar+=valInc;
+		pc++;
 		if (valBar + valInc > valMax){
 			valBar = valMax;
 		}
