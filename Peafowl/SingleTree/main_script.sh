@@ -38,7 +38,7 @@ cd "$output"
 # Following codes are used when tree is not estimated for all k-mer values
 # calculate entropy to get best kmer length
 mkdir "KmerOutputs"
-./differentKmerEntropy.sh $entropy_lower $entropy_higher $specie_no $no_of_threads "$source_folder" $is_reverse_compliment
+/usr/bin/time -v -o time_for_entropy.txt ./differentKmerEntropy.sh $entropy_lower $entropy_higher $specie_no $no_of_threads "$source_folder" $is_reverse_compliment
 kmer_len="$?"
 
 echo ''
@@ -47,11 +47,11 @@ echo $kmer_len
 
 mv "KmerOutputs/KmerOutputs""_$kmer_len""/kmer_exist_output.txt" "./kmer_exist_output.txt"
 
-# bin_len=$(wc -l < "kmer_exist_output.txt")
-# bin_len=`expr $bin_len - 1`
-# echo "$specie_no $bin_len" >> output.phy
+bin_len=$(wc -l < "kmer_exist_output.txt")
+bin_len=`expr $bin_len - 1`
+echo "$bin_len $specie_no" > "rows_cols.txt"
 
-./transpose.sh
+/usr/bin/time -v -o time_for_transpose.txt ./transpose.sh
 # extract nsequnce length from kmer_exist_output.txt file (last line number with content - 1)
 
 
@@ -62,7 +62,7 @@ mv "KmerOutputs/KmerOutputs""_$kmer_len""/kmer_exist_output.txt" "./kmer_exist_o
 # with avx support
 # raxmlHPC-PTHREADS-AVX -m BINGAMMA -p 12345 -T $no_of_threads -s output.phy -n T1
 # if no avx support
-raxmlHPC-PTHREADS -m BINGAMMA -p 12345 -T $no_of_threads -s output.phy -n T1
+/usr/bin/time -v -o time_for_raxml.txt raxmlHPC-PTHREADS -m BINGAMMA -p 12345 -T $no_of_threads -s output.phy -n T1
 
 #raxmlHPC -m BINCAT -p 12345 -s output.phy -n T1
 # raxmlHPC-PTHREADS-AVX -m BINGAMMA -p 12345 -T $no_of_threads -n "$out_name" -f I -t RAxML_result.T1

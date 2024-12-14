@@ -24,9 +24,9 @@ do
 	q=$n$y
 
 	if [ "$is_reverse_compliment" = "false" ]; then
-		jellyfish count -m $kmer_len -s $FILESIZE -t $no_of_threads $FILENAME -o $p
+		/usr/bin/time -v -o "../$FILENAME""_$kmer_len"".jellyfish.time" jellyfish count -m $kmer_len -s $FILESIZE -t $no_of_threads $FILENAME -o $p
 	else
-		jellyfish count -m $kmer_len -s $FILESIZE -t $no_of_threads -C $FILENAME -o $p
+		/usr/bin/time -v -o "../$FILENAME""_$kmer_len"".jellyfish.rc.time" jellyfish count -m $kmer_len -s $FILESIZE -t $no_of_threads -C $FILENAME -o $p
 	fi
 
 
