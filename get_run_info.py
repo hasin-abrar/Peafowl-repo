@@ -47,7 +47,7 @@ def write_time_breakdown(out_fn, genome_list, kmer_list):
     raxml_time = get_wall_clock_time_in_sec(raxml_fn, prompt)
 
     with open(out_fn, 'w') as f:
-        f.write(str(kmer_extraction_time)+' '+str(entropy_time - kmer_extraction_time)+' '+ str(transpose_time)+' '+str(raxml_time)+'\n')
+        f.write(str(round(kmer_extraction_time, 2))+' '+str(entropy_time - kmer_extraction_time)+' '+ str(transpose_time)+' '+str(raxml_time)+'\n')
     f.close()
 
 def get_genome_list(fn):
