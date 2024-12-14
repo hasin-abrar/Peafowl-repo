@@ -26,7 +26,7 @@ def get_sec_from_time_str(time_str):
 def get_wall_clock_time_in_sec(file_name, prompt):
     wall_clock = get_value_from_prompt(file_name, prompt)
     total_time = get_sec_from_time_str(wall_clock)
-    return total_time
+    return round(total_time, 2)
 
 def get_kmer_extraction_time_in_sec(genome_list, kmer_list, prompt):
     total_sec = 0
@@ -34,7 +34,7 @@ def get_kmer_extraction_time_in_sec(genome_list, kmer_list, prompt):
         for genome in genome_list:
             fn = genome+"_"+str(kmer)+".jellyfish.rc.time"
             total_sec += get_wall_clock_time_in_sec(fn, prompt)
-    return total_sec
+    return round(total_sec,2)
 
 def write_time_breakdown(out_fn, genome_list, kmer_list):
     prompt = "Elapsed (wall clock) time (h"
@@ -47,7 +47,7 @@ def write_time_breakdown(out_fn, genome_list, kmer_list):
     raxml_time = get_wall_clock_time_in_sec(raxml_fn, prompt)
 
     with open(out_fn, 'w') as f:
-        f.write(str(round(kmer_extraction_time, 2))+' '+str(entropy_time - kmer_extraction_time)+' '+ str(transpose_time)+' '+str(raxml_time)+'\n')
+        f.write(str(kmer_extraction_time)+' '+str(entropy_time - kmer_extraction_time)+' '+ str(transpose_time)+' '+str(raxml_time)+'\n')
     f.close()
 
 def get_genome_list(fn):
