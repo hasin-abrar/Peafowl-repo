@@ -316,7 +316,7 @@ int main(int argc, char **argv){
 	kmerLength = stoi(argv[2]); //kmer length passed as argument when running cpp from run.sh
 	NUM_THREADS=stoi(argv[3]);
 	string sizeFileName = argv[4];
-	double maxMem = 8 * 1024 * 1024;
+	double maxMem = 32 * 1024 * 1024;
 
 	string fileLine;
 	long long int totalSize = 0;

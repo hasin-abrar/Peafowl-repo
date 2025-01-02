@@ -28,17 +28,20 @@ def get_wall_clock_time_in_sec(file_name, prompt):
     total_time = get_sec_from_time_str(wall_clock)
     return round(total_time, 2)
 
-def get_kmer_extraction_time_in_sec(genome_list, kmer_list, prompt):
+def get_kmer_extraction_time_in_sec(genome_list, kmer_list, prompt, rc = True):
     total_sec = 0
     for kmer in kmer_list:
         for genome in genome_list:
-            fn = genome+"_"+str(kmer)+".jellyfish.rc.time"
+            if rc == True:
+                fn = genome+"_"+str(kmer)+".jellyfish.rc.time"
+            else:
+                fn = genome+"_"+str(kmer)+".jellyfish.time"
             total_sec += get_wall_clock_time_in_sec(fn, prompt)
     return round(total_sec,2)
 
-def write_time_breakdown(out_fn, genome_list, kmer_list):
+def write_time_breakdown(out_fn, genome_list, kmer_list, rc):
     prompt = "Elapsed (wall clock) time (h"
-    kmer_extraction_time = get_kmer_extraction_time_in_sec(genome_list, kmer_list, prompt)
+    kmer_extraction_time = get_kmer_extraction_time_in_sec(genome_list, kmer_list, prompt, rc)
     entropy_fn = "time_for_entropy.txt"
     entropy_time = get_wall_clock_time_in_sec(entropy_fn, prompt)
     transpose_fn = "time_for_transpose.txt"
@@ -56,13 +59,22 @@ def get_genome_list(fn):
     genome_list = [line.strip() for line in lines]
     return genome_list
 
+'''
+@param reverse = True when reverse complement is true 
+'''
 def main():
     import sys
     genome_list_fn = sys.argv[1]
     out_fn = sys.argv[2]
+    reverse = sys.argv[3]
+
+    if reverse == "y":
+        rc = True
+    else:
+        rc = False
     
     genome_list = get_genome_list(genome_list_fn)
     kmer_list = [i for i in range(9, 32, 2)]
-    write_time_breakdown(out_fn, genome_list, kmer_list)
+    write_time_breakdown(out_fn, genome_list, kmer_list, rc)
 
 main()

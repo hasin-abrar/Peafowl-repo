@@ -62,7 +62,7 @@ echo "$bin_len $specie_no" > "rows_cols.txt"
 # with avx support
 # raxmlHPC-PTHREADS-AVX -m BINGAMMA -p 12345 -T $no_of_threads -s output.phy -n T1
 # if no avx support
-/usr/bin/time -v -o time_for_raxml.txt raxmlHPC-PTHREADS -m BINGAMMA -p 12345 -T $no_of_threads -s output.phy -n T1
+/usr/bin/time -v -o time_for_raxml.txt raxmlHPC-PTHREADS-AVX -m BINGAMMA -p 12345 -T $no_of_threads -s output.phy -n T1
 
 #raxmlHPC -m BINCAT -p 12345 -s output.phy -n T1
 # raxmlHPC-PTHREADS-AVX -m BINGAMMA -p 12345 -T $no_of_threads -n "$out_name" -f I -t RAxML_result.T1
@@ -78,7 +78,7 @@ echo 'Deleting unncessary files...'
 rm -r KmerOutputs
 rm -r "$source_folder"
 rm "differentKmerEntropy.sh" findMaxEntropy.cpp entropy.cpp final_run.sh
-rm kmer_exist_output.txt output.phy findMaxEntropy kmerMerge.cpp transpose.sh
+rm kmer_exist_output.txt findMaxEntropy kmerMerge.cpp transpose.sh
 rm RAxML_info.T1 RAxML_parsimonyTree.T1 RAxML_bestTree.T1 RAxML_log.T1
 
 mv "RAxML_result.T1" "Result_unrooted_tree_Kmer_"$kmer_len".newick"
