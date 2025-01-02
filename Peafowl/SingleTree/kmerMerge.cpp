@@ -208,7 +208,6 @@ struct ThreadArg
 	int threadID;
 };
 
-
 //readfile argument function is needed
 void * readCases(void *threadid)
 {
@@ -233,9 +232,9 @@ void * readCases(void *threadid)
 				ht->insertKmer(kmer_arrays[i][0].intValueOfKmer, kmer_arrays[i][0].intValueOfRCKmer, kmer_arrays[i][0].kmerCount, kmer_arrays[i][0].speciesNo);
 				kmer_arrays[i].clear();
 			}
-			else {
-				continue;
-			}
+			// else {
+			// 	continue;
+			// }
 		}
 		// readfiles[] pointer will always point to the latest line. So,
 		// at any iteration after the first one, the file is not read 
@@ -283,7 +282,7 @@ bool cmpLex(const pair<string, string> &a,const pair<string, string> &b)
        return a.second<b.second;
 }
 
-void createSortedKmerFile(string filename){
+void writeSortedKmerFile(string filename){
 	ifstream kmerFile(filename.c_str());
 	string kmerCount, kmer;
 	vector<pair<string, string> > kmerList; // first = >count, second = kmer
@@ -308,6 +307,19 @@ void createSortedKmerFile(string filename){
 		}
 	}
 	outKmerFile.close();
+}
+
+
+struct ThreadFileArg
+{
+	string filename;
+};
+
+void* threadFunc(void* arg) {
+    ThreadFileArg* args = static_cast<ThreadFileArg*>(arg);
+    writeSortedKmerFile(args->filename);
+    delete args; // Clean up allocated memory.
+    return nullptr;
 }
 
 int main(int argc, char **argv){
@@ -335,42 +347,66 @@ int main(int argc, char **argv){
 	cout<<"Total partitions: "<<partitionCount<<endl;
 	
 	
-	//vector<string> file_arr;
-	// should be equal to noOfSpecies
-	char *file_arr[500];
+	vector<string> file_arr_vec;
 	int k = 0;
 
 	while(filename_arr.size()>1){
         size_t pos = filename_arr.find("/");
         string name = filename_arr.substr(0,pos);
-        createSortedKmerFile(name);
-		// cout<<name<<endl;
-		//file_arr.push_back(name);
-		file_arr[k]=new char[name.size()+1];
-		for(int i=0;i<name.size();i++){
-			file_arr[k][i]=name[i];
-		}
-		file_arr[k][name.size()]='\0';
-		//file_arr[k]=(char*)name;
+		file_arr_vec.emplace_back(name);
 		filename_arr=filename_arr.substr(pos+1);
-		k++;
 		noOfSpecies++;
+
+		
 	}
+
+	pthread_t threads[NUM_THREADS];
+	pthread_attr_t attr_file;
+	pthread_attr_init(&attr_file);
+	pthread_attr_setdetachstate(&attr_file, PTHREAD_CREATE_JOINABLE);
+	int rc_file;
+	void *status_file;
+
+	int current_species = 0;
+	while(current_species < noOfSpecies){
+		int active_threads = 0;
+
+		for(int i=0; i<NUM_THREADS && current_species < noOfSpecies; i++, current_species++){
+			ThreadFileArg* args = new ThreadFileArg{file_arr_vec[current_species]};
+			rc_file = pthread_create(&threads[active_threads], &attr_file, threadFunc, args);
+			if (rc_file)
+			{
+				std::cerr << "Error: Unable to create thread for file: " << file_arr_vec[current_species] << std::endl;
+				exit(-1);
+			}
+			active_threads++;
+		}
+
+		for (int i = 0; i < active_threads; ++i)
+		{
+			rc_file = pthread_join(threads[i], &status_file);
+			if (rc_file)
+			{
+				exit(-1);
+			}
+		}
+	}
+
 
 	kmer_arrays=new vector<ShortKmer>[noOfSpecies];
 	readfiles= new ifstream[noOfSpecies];
 	ht=new HashTable();
 
 	for(int i=0; i<noOfSpecies; i++){/////////
-		string p = (string)file_arr[i];
+		
+		string p = file_arr_vec[i];
         size_t pos = p.find(".");
         string name = p.substr(0,pos);
 		nameOfSpecies.push_back(name);
+		
+		readfiles[i].open(file_arr_vec[i]);
 	}
 
-	for(int i=0; i<noOfSpecies; i++){
-		readfiles[i].open(file_arr[i]);
-	}
 	outfile.open("kmer_exist_output.txt");
 	string printline = nameOfSpecies[0];
 	for(int i=1; i<noOfSpecies; i++){
